@@ -57,18 +57,9 @@ export default function HeroCanvas({
         
         if (i === 0) setIsLoaded(true);
         if (count === frameCount && onComplete) onComplete();
-      }).catch(() => {
-        // Fallback for older browsers or broken files
-        count++;
-        const currentProgress = (count / frameCount) * 100;
-        if (onProgress) onProgress(currentProgress);
-        
-        window.dispatchEvent(new CustomEvent("vaastuLoadingProgress", { 
-          detail: { progress: currentProgress } 
-        }));
-        
-        if (i === 0) setIsLoaded(true);
-        if (count === frameCount && onComplete) onComplete();
+      }).catch((err) => {
+        console.error(`Frame ${frameNumber} failed to decode:`, err);
+        // Do not increment count here so progress accurately reflects visual readiness
       });
       
       loadedImages.push(img);

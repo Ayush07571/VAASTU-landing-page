@@ -19,9 +19,10 @@ export default function CurtainLoader() {
     window.addEventListener("vaastuLoadingProgress", handleProgress);
 
     // Fallback if no frames are found or loading fails
+    // Increased to 60s to allow large 3D asset downloads (150MB+) on Vercel
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 10000);
+    }, 60000);
 
     return () => {
       window.removeEventListener("vaastuLoadingProgress", handleProgress);
