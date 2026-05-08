@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+@theme {
+  --color-raat: #0A0A08;
+  --color-charcoal: #1A1814;
+  --color-sona: #C5973A;
+  --color-cream: #F7F0E3;
+  --color-accent-text: #EDE8DF;
+  --color-dark-text: #1A1814;
+
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "DM Sans", sans-serif;
+
+  --animate-marquee: marquee 30s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+:root {
+  --background: #0A0A08;
+  --foreground: #EDE8DF;
+}
+
+html.lenis {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+}
+
+.spaced-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+}
+
+.italic-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.glass-premium {
+  background: rgba(10, 10, 8, 0.4);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(197, 151, 58, 0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.gold-glow {
+  text-shadow: 0 0 30px rgba(197, 151, 58, 0.5);
+}
+
+.gold-foil-text {
+  background: linear-gradient(
+    to right,
+    #C5973A 20%,
+    #F7F0E3 40%,
+    #F7F0E3 60%,
+    #C5973A 80%
+  );
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gold-shimmer 4s linear infinite;
+}
+
+@keyframes gold-shimmer {
+  to {
+    background-position: 200% center;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: #0A0A08;
+}
+::-webkit-scrollbar-thumb {
+  background: #C5973A;
+  border-radius: 10px;
+}
+
+/* Hide default cursor globally */
+.cursor-none * {
+  cursor: none !important;
+}
