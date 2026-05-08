@@ -30,11 +30,11 @@ export default function IndiaMap() {
                 <p className="text-accent-text/40 text-[10px] uppercase tracking-widest">Cities</p>
               </div>
               <div>
-                <p className="text-sona text-3xl font-serif">450+</p>
+                <p className="text-sona text-3xl font-serif">600+</p>
                 <p className="text-accent-text/40 text-[10px] uppercase tracking-widest">Properties</p>
               </div>
               <div>
-                <p className="text-sona text-3xl font-serif">₹1200Cr+</p>
+                <p className="text-sona text-3xl font-serif">₹3200Cr+</p>
                 <p className="text-accent-text/40 text-[10px] uppercase tracking-widest">AUM</p>
               </div>
             </div>

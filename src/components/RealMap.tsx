@@ -24,6 +24,20 @@ const cities = [
   { name: "Jaipur", count: 24, coords: [26.9124, 75.7873] },
   { name: "Kolkata", count: 27, coords: [22.5726, 88.3639] },
   { name: "Chennai", count: 42, coords: [13.0827, 80.2707] },
+  { name: "Pune", count: 31, coords: [18.5204, 73.8567] },
+  { name: "Ahmedabad", count: 19, coords: [23.0225, 72.5714] },
+  { name: "Chandigarh", count: 12, coords: [30.7333, 76.7794] },
+  { name: "Kochi", count: 15, coords: [9.9312, 76.2673] },
+  { name: "Udaipur", count: 8, coords: [24.5854, 73.7125] },
+  { name: "Dehradun", count: 6, coords: [30.3165, 78.0322] },
+  { name: "Lucknow", count: 14, coords: [26.8467, 80.9462] },
+  { name: "Indore", count: 9, coords: [22.7196, 75.8577] },
+  { name: "Varanasi", count: 4, coords: [25.3176, 82.9739] },
+  { name: "Shimla", count: 5, coords: [31.1048, 77.1734] },
+  { name: "Jodhpur", count: 7, coords: [26.2389, 73.0243] },
+  { name: "Bhopal", count: 11, coords: [23.2599, 77.4126] },
+  { name: "Visakhapatnam", count: 13, coords: [17.6868, 83.2185] },
+  { name: "Surat", count: 10, coords: [21.1702, 72.8311] },
 ];
 
 function CustomZoomControl() {

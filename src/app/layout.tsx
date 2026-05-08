@@ -17,9 +17,13 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "VAASTU | Spaces Aligned With Your Destiny",
-  description: "Ultra-luxury Indian real estate. Penthouses, Farmhouses, and Heritage Bungalows across India's most coveted locations.",
-  keywords: ["Luxury Real Estate India", "Vastu Shastra", "High-end Homes", "Mumbai Real Estate", "Delhi Farmhouses"],
+  title: "VAASTU | India's Finest Luxury Real Estate Experience",
+  description: "Discover a curated portfolio of India's most exclusive residences. From Mumbai's soaring penthouses to Goa's heritage estates, VAASTU aligns luxury with architectural excellence and spiritual harmony.",
+  keywords: ["Luxury Real Estate India", "Vastu Shastra", "High-end Homes", "Mumbai Penthouses", "Delhi Farmhouses", "Premium Property India"],
+  icons: {
+    icon: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 import SmoothScroll from "@/components/SmoothScroll";

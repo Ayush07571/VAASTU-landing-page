@@ -130,7 +130,7 @@ export default function About() {
             </div>
             <div className="flex flex-col">
               <span className="text-4xl md:text-5xl font-serif text-sona mb-2">
-                <Counter value={500} suffix="+" delay={200} />
+                <Counter value={600} suffix="+" delay={200} />
               </span>
               <span className="text-[10px] uppercase tracking-widest text-dark-text/50">Properties Delivered</span>
             </div>

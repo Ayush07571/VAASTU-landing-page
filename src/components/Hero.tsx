@@ -99,7 +99,7 @@ export default function Hero() {
             <span>Portfolio</span>
           </div>
           <div className="flex items-center space-x-2">
-            <span className="text-sona">500+</span>
+            <span className="text-sona">600+</span>
             <span>Properties</span>
           </div>
           <div className="flex items-center space-x-2">
