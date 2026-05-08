@@ -8,9 +8,18 @@ interface HeroCanvasProps {
   baseUrl: string;
   extension?: string;
   scrollYProgress: MotionValue<number>;
+  onProgress?: (progress: number) => void;
+  onComplete?: () => void;
 }
 
-export default function HeroCanvas({ frameCount, baseUrl, extension = "webp", scrollYProgress }: HeroCanvasProps) {
+export default function HeroCanvas({ 
+  frameCount, 
+  baseUrl, 
+  extension = "webp", 
+  scrollYProgress,
+  onProgress,
+  onComplete
+}: HeroCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -38,11 +47,28 @@ export default function HeroCanvas({ frameCount, baseUrl, extension = "webp", sc
       // Pre-emptively decode the image to prevent stuttering during scroll
       img.decode().then(() => {
         count++;
+        const currentProgress = (count / frameCount) * 100;
+        if (onProgress) onProgress(currentProgress);
+        
+        // Dispatch global event for the CurtainLoader
+        window.dispatchEvent(new CustomEvent("vaastuLoadingProgress", { 
+          detail: { progress: currentProgress } 
+        }));
+        
         if (i === 0) setIsLoaded(true);
+        if (count === frameCount && onComplete) onComplete();
       }).catch(() => {
         // Fallback for older browsers or broken files
         count++;
+        const currentProgress = (count / frameCount) * 100;
+        if (onProgress) onProgress(currentProgress);
+        
+        window.dispatchEvent(new CustomEvent("vaastuLoadingProgress", { 
+          detail: { progress: currentProgress } 
+        }));
+        
         if (i === 0) setIsLoaded(true);
+        if (count === frameCount && onComplete) onComplete();
       });
       
       loadedImages.push(img);
