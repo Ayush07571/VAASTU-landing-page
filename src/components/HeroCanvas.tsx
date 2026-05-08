@@ -34,37 +34,57 @@ export default function HeroCanvas({
   // Map smooth scroll progress to frame index
   const frameIndex = useTransform(smoothProgress, [0, 1], [0, frameCount - 1]);
 
-  // Preload images with pre-emptive decoding
+  // High-performance Serial Batch Preloader
   useEffect(() => {
+    let isMounted = true;
     const loadedImages: HTMLImageElement[] = [];
     let count = 0;
+    const BATCH_SIZE = 15; // Load 15 images at a time to prevent browser throttling
 
-    for (let i = 0; i < frameCount; i++) {
-      const img = new Image();
-      const frameNumber = i.toString().padStart(3, '0');
-      img.src = `${baseUrl}frame_${frameNumber}_delay-0.2s.${extension}`;
+    const loadBatch = async (start: number) => {
+      if (!isMounted) return;
       
-      // Pre-emptively decode the image to prevent stuttering during scroll
-      img.decode().then(() => {
-        count++;
-        const currentProgress = (count / frameCount) * 100;
-        if (onProgress) onProgress(currentProgress);
+      const end = Math.min(start + BATCH_SIZE, frameCount);
+      const batchPromises = [];
+
+      for (let i = start; i < end; i++) {
+        const img = new Image();
+        const frameNumber = i.toString().padStart(3, '0');
+        img.src = `${baseUrl}frame_${frameNumber}_delay-0.2s.${extension}`;
         
-        // Dispatch global event for the CurtainLoader
-        window.dispatchEvent(new CustomEvent("vaastuLoadingProgress", { 
-          detail: { progress: currentProgress } 
-        }));
+        const promise = img.decode().then(() => {
+          count++;
+          const currentProgress = (count / frameCount) * 100;
+          if (onProgress) onProgress(currentProgress);
+          
+          window.dispatchEvent(new CustomEvent("vaastuLoadingProgress", { 
+            detail: { progress: currentProgress } 
+          }));
+          
+          if (i === 0) setIsLoaded(true);
+          loadedImages[i] = img; // Insert at specific index to maintain order
+        }).catch((err) => {
+          console.error(`Frame ${frameNumber} failed:`, err);
+          count++; // Still count it so progress moves, but log the error
+        });
         
-        if (i === 0) setIsLoaded(true);
-        if (count === frameCount && onComplete) onComplete();
-      }).catch((err) => {
-        console.error(`Frame ${frameNumber} failed to decode:`, err);
-        // Do not increment count here so progress accurately reflects visual readiness
-      });
-      
-      loadedImages.push(img);
-    }
+        batchPromises.push(promise);
+      }
+
+      await Promise.all(batchPromises);
+
+      if (count < frameCount && isMounted) {
+        // Load next batch
+        loadBatch(end);
+      } else if (count === frameCount && onComplete) {
+        onComplete();
+      }
+    };
+
+    loadBatch(0);
     setImages(loadedImages);
+
+    return () => { isMounted = false; };
   }, [frameCount, baseUrl, extension]);
 
   // Draw current frame to canvas
