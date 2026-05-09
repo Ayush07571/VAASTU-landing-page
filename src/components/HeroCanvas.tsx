@@ -24,11 +24,11 @@ export default function HeroCanvas({
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Add ultra-smooth spring physics for that "heavy" cinematic feel
+  // Ultra-responsive spring to eliminate input lag
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 20,
-    damping: 40,
-    restDelta: 0.0001
+    stiffness: 300, 
+    damping: 60,
+    restDelta: 0.001
   });
 
   // Map smooth scroll progress to frame index
@@ -89,14 +89,18 @@ export default function HeroCanvas({
 
   // Draw current frame to canvas
   useEffect(() => {
+    let animationFrameId: number;
+    
     const render = () => {
       const canvas = canvasRef.current;
-      const ctx = canvas?.getContext("2d");
-      if (!canvas || !ctx || images.length === 0) return;
+      if (!canvas || images.length === 0) return;
+      
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
 
       const currentFrame = Math.round(frameIndex.get());
       const img = images[currentFrame] || images[0];
-      if (!img.complete) return; // Don't draw if the specific frame hasn't loaded yet
+      if (!img.complete) return;
 
       // Maintain aspect ratio (Cover effect)
       const canvasAspect = canvas.width / canvas.height;
@@ -115,18 +119,25 @@ export default function HeroCanvas({
         offsetY = 0;
       }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // No clearRect needed for full-screen opaque images
       ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
     };
 
+    const handleFrame = () => {
+      render();
+    };
+
     const unsubscribe = frameIndex.on("change", () => {
-      requestAnimationFrame(render);
+      animationFrameId = requestAnimationFrame(handleFrame);
     });
 
     // Initial render
     if (isLoaded) render();
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+      cancelAnimationFrame(animationFrameId);
+    };
   }, [images, isLoaded, frameIndex]);
 
   // Handle Resize
@@ -152,7 +163,7 @@ export default function HeroCanvas({
       <motion.canvas
         ref={canvasRef}
         className="w-full h-full object-cover"
-        style={{ opacity: isLoaded ? 1 : 0 }}
+        style={{ opacity: isLoaded ? 1 : 0, willChange: "transform" }}
       />
     </div>
   );

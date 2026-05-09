@@ -1,7 +1,8 @@
 "use client";
 
 import { motion, useScroll } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
+import { useLenis } from "lenis/react";
 import Magnetic from "@/components/Magnetic";
 import HeroCanvas from "@/components/HeroCanvas";
 import Image from "next/image";
@@ -9,10 +10,33 @@ import Link from "next/link";
 
 export default function Hero() {
   const containerRef = useRef<HTMLElement>(null);
+  const lenis = useLenis();
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start start", "end end"]
   });
+
+  // Automated cinematic scroll for PC
+  useEffect(() => {
+    if (!lenis || typeof window === 'undefined' || window.innerWidth < 1024) return;
+
+    const startAutoScroll = () => {
+      // Small buffer to let the user "settle" after the loader opens
+      setTimeout(() => {
+        if (window.scrollY < 50) {
+          lenis.scrollTo(window.innerHeight * 3, {
+            duration: 8, // Increased speed to reach 30fps average
+            easing: (t) => Math.min(1, 1.001 * t), // Very slight ease-in but mostly steady
+          });
+        }
+      }, 1000);
+    };
+
+    window.addEventListener("vaastuSiteLoaded", startAutoScroll);
+
+    return () => window.removeEventListener("vaastuSiteLoaded", startAutoScroll);
+  }, [lenis]);
 
   return (
     <section id="hero" ref={containerRef} className="relative h-screen lg:h-[400vh] w-full flex items-start">
